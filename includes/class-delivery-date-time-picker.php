@@ -28,8 +28,10 @@ class WC_Delivery_Date_Time_Picker {
     public function enqueue_scripts() {
         wp_enqueue_script('jquery-ui-datepicker');
         wp_enqueue_script('wc-delivery-datepicker', plugin_dir_url(__FILE__) . '../assets/js/delivery-datepicker.js', ['jquery', 'jquery-ui-datepicker'], null, true);
+        wp_localize_script('wc-delivery-datepicker', 'delivery_blackout_dates', explode(',', get_option('wc_delivery_blackout_dates', '')));
         wp_enqueue_style('jquery-ui-css', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
     }
+
 
     public function add_delivery_fields($checkout) {
         echo '<div id="wc_delivery_date_time"><h3>' . __('Delivery Details') . '</h3>';

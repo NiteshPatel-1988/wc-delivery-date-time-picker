@@ -19,6 +19,8 @@ class WC_Delivery_Date_Time_Picker {
         // Enqueue frontend scripts
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
 
+        add_action('admin_enqueue_scripts', [$this, 'wc_delivery_admin_scripts']);
+
         // Load settings page
         if (is_admin()) {
             include_once WC_DELIVERY_PLUGIN_PATH . 'includes/class-delivery-settings.php';
@@ -31,6 +33,24 @@ class WC_Delivery_Date_Time_Picker {
         wp_localize_script('wc-delivery-datepicker', 'delivery_blackout_dates', explode(',', get_option('wc_delivery_blackout_dates', '')));
         wp_enqueue_style('jquery-ui-css', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
     }
+
+    
+    public function wc_delivery_admin_scripts($hook) {
+        // Only load on WooCommerce settings pages
+        if (isset($_GET['page']) && $_GET['page'] === 'wc-settings' && isset($_GET['tab']) && $_GET['tab'] === 'shipping') {
+            echo 'called';
+            wp_enqueue_script('jquery-ui-datepicker');
+            wp_enqueue_script(
+                'wc-delivery-multidate',
+                plugin_dir_url(__FILE__) . '../assets/js/admin-datepicker.js',
+                ['jquery', 'jquery-ui-datepicker'],
+                '1.0',
+                true
+            );
+            wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
+        }
+    }
+
 
 
     public function add_delivery_fields($checkout) {
@@ -78,12 +98,15 @@ class WC_Delivery_Date_Time_Picker {
     }
 
     private function get_time_slots() {
-        return [
-            '' => __('Select a time slot'),
-            '9:00 AM - 12:00 PM' => '9:00 AM - 12:00 PM',
-            '12:00 PM - 3:00 PM' => '12:00 PM - 3:00 PM',
-            '3:00 PM - 6:00 PM' => '3:00 PM - 6:00 PM',
-            '6:00 PM - 9:00 PM' => '6:00 PM - 9:00 PM',
-        ];
+        $time_slots_raw = get_option('wc_delivery_time_slots', '');
+        $lines = array_filter(array_map('trim', explode("\n", $time_slots_raw)));
+
+        $slots = ['' => __('Select a time slot', 'wc-delivery')];
+        foreach ($lines as $line) {
+            $slots[$line] = $line;
+        }
+
+        return $slots;
     }
+
 }

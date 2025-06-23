@@ -1,13 +1,18 @@
 <?php
 /**
  * Plugin Name: Delivery Date & Time Slot Picker for WooCommerce
- * Description: Allows customers to choose a delivery date and time slot during WooCommerce checkout.
+ * Plugin URI: 
+ * Description: Allows customers to select delivery date and time slot at WooCommerce checkout. Supports blackout dates and slot limits.
  * Version: 1.0.0
  * Author: Nitesh Patel
+ * Author URI: 
  * Text Domain: wc-delivery
  * Domain Path: /languages
- * License: GPL2+
- * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
+ * Requires PHP: 7.4
+ * Requires at least: 5.5
+ * Tested up to: 6.5
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 defined( 'ABSPATH' ) || exit;

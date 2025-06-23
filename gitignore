@@ -1,0 +1,20 @@
+# Ignore node_modules and composer vendor
+node_modules/
+vendor/
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Ignore IDE/editor configs
+.vscode/
+.idea/
+
+# Ignore WordPress uploads and sensitive files
+wp-content/uploads/
+wp-config.php

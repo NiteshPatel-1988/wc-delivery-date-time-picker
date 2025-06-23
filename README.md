@@ -1,53 +1,37 @@
-=== Delivery Date & Time Slot Picker for WooCommerce ===
-Contributors: niteshpatel
-Tags: delivery, checkout, woocommerce, date picker, time slot, delivery date, delivery time, shipping
-Requires at least: 5.5
-Tested up to: 6.5
-Requires PHP: 7.4
-Stable tag: 1.0.0
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+# Delivery Date & Time Slot Picker for WooCommerce
 
-Let your customers choose a delivery date and time slot during WooCommerce checkout. Ideal for local delivery businesses like grocery shops, bakeries, or flower delivery services.
+Let your customers select a delivery date and time slot during WooCommerce checkout. Perfect for local delivery services like bakeries, grocery stores, or flower shops.
 
-== Description ==
-This plugin adds a delivery date and time slot picker to WooCommerce checkout. Customers can select a preferred delivery date and time slot before placing the order. Admins can configure blackout dates, add custom time slots, and limit the number of deliveries per slot — all from the WooCommerce settings.
+## 🔥 Features
 
-== Features ==
-* Customers can select a **delivery date** via a date picker during checkout
-* Customers can select a **delivery time slot** from admin-defined options
-* Admin can add **multiple blackout dates** via a multi-date picker (no typing required)
-* Admin can limit the **number of orders per time slot**
-* Settings available under **WooCommerce > Settings > Shipping > Delivery Settings**
-* Uses native WooCommerce order meta to store and display selections
-* Lightweight, simple, and effective — no bloated settings
+- Delivery Date Picker at checkout
+- Admin-configurable Delivery Time Slots
+- Limit orders per time slot
+- Blackout Dates via calendar (multi-select)
+- WooCommerce shipping method compatibility
 
-== Installation ==
-1. Upload the plugin folder to `/wp-content/plugins/`
-2. Activate the plugin through the Plugins menu in WordPress
-3. Go to **WooCommerce > Settings > Shipping > Delivery Settings** to configure blackout dates and time slots
+## 📸 Screenshots
 
-== Frequently Asked Questions ==
-= Can I set holidays or off days? =  
-Yes. Use the **Blackout Dates** picker to block any delivery days (supports multiple dates).
+| Checkout View | Admin Settings |
+|---------------|----------------|
+| ![Checkout](assets/screenshot-1.png) | ![Admin](assets/screenshot-2.png) |
 
-= Can I set different time slots like "10 AM – 12 PM", "2 PM – 4 PM"? =  
-Yes. Add one time slot per line in the admin field. They will appear on checkout.
+## 📥 Installation
 
-= Will it work with all shipping methods? =  
-Yes. It’s compatible with standard WooCommerce shipping logic.
+1. Upload the plugin to your WordPress `/wp-content/plugins/` directory.
+2. Activate it via the **Plugins** menu.
+3. Go to **WooCommerce > Settings > Shipping > Delivery Settings** to configure.
 
-== Screenshots ==
-1. Delivery date and time picker on checkout
-2. Delivery settings in WooCommerce admin panel
+## 🌍 Translations
 
-== Changelog ==
-= 1.0.0 =
-* Initial stable release
-* Added delivery date & time slot picker
-* Admin settings for blackout dates and slot limits
-* Enhanced with multi-date picker for holidays
+This plugin is translation-ready. `.pot` file is located in `/languages/`.
 
-== Upgrade Notice ==
-= 1.0.0 =
-This is the first stable release. Compatible with WooCommerce 7+ and WP 6.5+.
+## 📜 License
+
+Licensed under [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
+
+---
+
+## 🤝 Contribute
+
+Feel free to submit PRs or report issues!

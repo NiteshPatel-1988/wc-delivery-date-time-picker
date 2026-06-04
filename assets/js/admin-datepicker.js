@@ -1,5 +1,5 @@
 jQuery(function($) {
-    var input = $('#wc_delivery_blackout_dates');
+    var input = $('#delidaam_delivery_blackout_dates');
     var selectedDates = [];
 
     input.datepicker({

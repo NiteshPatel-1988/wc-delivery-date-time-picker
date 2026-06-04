@@ -1,9 +1,9 @@
-# Copyright (C) 2025 Nitesh Patel
+# Copyright (C) 2025 NitsPatel
 # This file is distributed under the GPL2+.
 msgid ""
 msgstr ""
 "Project-Id-Version: Delivery Date & Time Slot Picker for WooCommerce 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-delivery-date-time-picker\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/delivery-date-time-slot-picker-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,18 +15,18 @@ msgstr ""
 "X-Domain: wc-delivery\n"
 
 #. Plugin Name of the plugin
-#: wc-delivery-date-time-picker.php
+#: delivery-date-time-slot-picker-for-woocommerce.php
 msgid "Delivery Date & Time Slot Picker for WooCommerce"
 msgstr ""
 
 #. Description of the plugin
-#: wc-delivery-date-time-picker.php
+#: delivery-date-time-slot-picker-for-woocommerce.php
 msgid "Allows customers to choose a delivery date and time slot during WooCommerce checkout."
 msgstr ""
 
 #. Author of the plugin
-#: wc-delivery-date-time-picker.php
-msgid "Nitesh Patel"
+#: delivery-date-time-slot-picker-for-woocommerce.php
+msgid "NitsPatel"
 msgstr ""
 
 #: includes/class-delivery-date-time-picker.php:104

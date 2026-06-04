@@ -1,0 +1,47 @@
+/*
+ * Delivery Date & Time Slot Picker — Checkout Styles
+ *
+ * Provides a consistent field appearance for both Classic and Block checkout.
+ */
+
+/* ==========================================================================
+   Classic Checkout — Delivery Details container
+   ========================================================================== */
+
+#delidaam_delivery_date_time {
+	border: 1px solid #d3ced2;
+	padding: 20px;
+	margin: 20px 0;
+	border-radius: 3px;
+}
+
+#delidaam_delivery_date_time > h3 {
+	font-size: 1em;
+	font-weight: 600;
+	margin: 0 0 20px;
+	padding: 0;
+	border: 0;
+}
+
+/* ==========================================================================
+   Block Checkout — Match classic checkout field appearance
+   ========================================================================== */
+
+/*
+ * Add a bordered container around the checkout step content area that holds
+ * our delivery fields, matching the classic checkout bordered box.
+ * :has() is supported in all modern browsers (Chrome 105+, Firefox 121+, Safari 15.4+).
+ */
+.wc-block-components-checkout-step__content:has( #order-delidaam-delivery_date ) {
+	border: 1px solid #d3ced2;
+	border-radius: 3px;
+	padding: 20px;
+	margin-top: 10px;
+}
+
+/*
+ * Our JS adds the `is-active` class to the .wc-block-components-text-input
+ * wrapper for the delivery date field. WooCommerce Blocks' own .is-active CSS
+ * then keeps the label above the input at all times, matching the classic
+ * checkout label-above-input design. No extra positioning rules needed here.
+ */

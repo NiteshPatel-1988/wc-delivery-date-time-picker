@@ -4,7 +4,7 @@ Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,13 +46,21 @@ Use the "Delivery Time Slots" field to define one time slot per line.
 Yes, it is fully compatible with shipping zones and shipping methods.
 
 = Is this plugin compatible with WooCommerce HPOS? =
-Yes. Version 1.3 uses `$order->get_meta()` and `$order->update_meta_data()` throughout, which are fully compatible with WooCommerce High Performance Order Storage (custom order tables).
+Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throughout, which are fully compatible with WooCommerce High Performance Order Storage (custom order tables).
 
 == Screenshots ==
 1. Delivery date and time slot fields on Classic & Block-based checkout
 2. Admin settings for configuring blackout dates and slots
 
 == Changelog ==
+
+= 1.4 =
+* Security/compatibility: guarded `is_plugin_active()` with a `function_exists()` check so the plugin no longer risks a fatal error on sites where `wp-admin/includes/plugin.php` hasn't been loaded yet
+* Fixed: "Max Orders per Time Slot" setting is now actually enforced - checkout is blocked (Classic and Block) once a delivery date/time slot combination reaches its configured order limit
+* Fixed: delivery date is now validated server-side (format, blackout dates, and past dates) on Classic checkout, matching the validation already used on Block checkout
+* Hardened: checkout field registration is now wrapped in error handling so a registration failure can't take down checkout
+* Hardened: asset enqueueing no longer triggers a PHP warning if a CSS/JS file is unexpectedly missing
+* Tested for compatibility with PHP 8.0-8.3
 
 = 1.3 =
 * Added consistent label-above-input design for delivery fields on both Classic and Block checkout
@@ -77,6 +85,9 @@ Yes. Version 1.3 uses `$order->get_meta()` and `$order->update_meta_data()` thro
 * Admin settings for blackout dates and slot limit
 
 == Upgrade Notice ==
+
+= 1.4 =
+Fixes the "Max Orders per Time Slot" setting so it is now enforced, adds server-side date validation on Classic checkout, and hardens the plugin against a fatal-error edge case and PHP 8 warnings. Recommended update for all users, especially anyone relying on slot limits.
 
 = 1.3 =
 Fixes delivery details not showing on the Classic checkout thank-you page and resolves HPOS compatibility issues. Unifies the field design across Classic and Block checkout. Recommended update for all users.

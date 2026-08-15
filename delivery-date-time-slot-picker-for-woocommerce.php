@@ -3,7 +3,7 @@
  * Plugin Name: Delivery Date & Time Slot Picker for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/delivery-date-time-slot-picker-for-woocommerce
  * Description: Allows customers to select delivery date and time slot at WooCommerce checkout. Supports blackout dates and slot limits.
- * Version: 1.4
+ * Version: 1.5
  * Author: NitsPatel
  * Author URI: https://github.com/NiteshPatel-1988
  * Requires Plugins: woocommerce
@@ -59,4 +59,26 @@ function delidaam_initialize_plugin() {
     }
 }
 add_action('woocommerce_init', 'delidaam_initialize_plugin');
+
+/**
+ * Add a "Settings" link on the Plugins list page, linking straight to
+ * WooCommerce > Settings > Shipping > Delivery Settings.
+ */
+function delidaam_plugin_action_links( $links ) {
+    $settings_url = add_query_arg(
+        [
+            'page'    => 'wc-settings',
+            'tab'     => 'shipping',
+            'section' => 'delidaam_delivery_settings',
+        ],
+        admin_url( 'admin.php' )
+    );
+
+    $settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'delivery-date-time-slot-picker-for-woocommerce' ) . '</a>';
+
+    array_unshift( $links, $settings_link );
+
+    return $links;
+}
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'delidaam_plugin_action_links' );
 

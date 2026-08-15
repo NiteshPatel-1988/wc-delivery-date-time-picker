@@ -108,10 +108,21 @@ class DELIDAAM_Delivery_Date_Time_Picker {
                 'delidaam-delivery-multidate',
                 plugin_dir_url(__FILE__) . '../assets/js/admin-datepicker.js',
                 ['jquery', 'jquery-ui-datepicker'],
-                '1.0',
+                '1.2',
                 true
             );
+            wp_localize_script( 'delidaam-delivery-multidate', 'delidaamAdminDatepicker', [
+                /* translators: %s: date being removed from the blackout dates list. */
+                'removeLabel' => __( 'Remove %s', 'delivery-date-time-slot-picker-for-woocommerce' ),
+                'placeholder' => __( 'Click to select blackout dates', 'delivery-date-time-slot-picker-for-woocommerce' ),
+            ] );
             wp_enqueue_style('jquery-ui-css', DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/jquery-ui.css', [], '1.12.1');
+            wp_enqueue_style(
+                'delidaam-admin-datepicker',
+                plugin_dir_url(__FILE__) . '../assets/css/admin-datepicker.css',
+                [],
+                '1.0'
+            );
         }
     }
 

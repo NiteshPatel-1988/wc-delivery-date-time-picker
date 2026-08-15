@@ -4,7 +4,7 @@ Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,11 +51,17 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 == Screenshots ==
 1. Delivery date and time slot fields on Classic & Block-based checkout
 2. Admin settings for configuring blackout dates and slots
+3. Delivery date and time slot shown on the WooCommerce admin order details screen
 
 == Changelog ==
 
+= 1.5 =
+* Added a "Settings" link to the plugin's row on the Plugins screen, linking directly to WooCommerce > Settings > Shipping > Delivery Settings
+* Improved Blackout Dates admin UI: selected dates now display as removable tags below the calendar instead of a raw comma-separated list in the input box
+* Regenerated the translation (.pot) template so translators have strings for the items above
+
 = 1.4 =
-* Security/compatibility: guarded `is_plugin_active()` with a `function_exists()` check so the plugin no longer risks a fatal error on sites where `wp-admin/includes/plugin.php` hasn't been loaded yet
+* Security/compatibility
 * Fixed: "Max Orders per Time Slot" setting is now actually enforced - checkout is blocked (Classic and Block) once a delivery date/time slot combination reaches its configured order limit
 * Fixed: delivery date is now validated server-side (format, blackout dates, and past dates) on Classic checkout, matching the validation already used on Block checkout
 * Hardened: checkout field registration is now wrapped in error handling so a registration failure can't take down checkout
@@ -85,6 +91,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 * Admin settings for blackout dates and slot limit
 
 == Upgrade Notice ==
+
+= 1.5 =
+Adds a quick "Settings" link on the Plugins screen and a friendlier Blackout Dates picker (removable date tags instead of a raw comma list). No breaking changes.
 
 = 1.4 =
 Fixes the "Max Orders per Time Slot" setting so it is now enforced, adds server-side date validation on Classic checkout, and hardens the plugin against a fatal-error edge case and PHP 8 warnings. Recommended update for all users, especially anyone relying on slot limits.

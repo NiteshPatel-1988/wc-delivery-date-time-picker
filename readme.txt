@@ -2,9 +2,9 @@
 Contributors: NitsPatel
 Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.5
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,15 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 
 == Changelog ==
 
+= 1.6 =
+* Security: delivery time slot is now validated server-side against the configured slots (Classic and Block checkout)
+* Security: settings values (blackout dates, slot limit, time slots) are now sanitized on save
+* Added: explicit HPOS and Cart & Checkout Blocks compatibility declarations
+* Fixed: duplicate validation messages and duplicate asset loading on checkout
+* Improved: slot limit check now queries only as many orders as needed
+* Added: uninstall cleanup of plugin options
+* Tested with WordPress 7.1 and WooCommerce 11.1
+
 = 1.5 =
 * Added a "Settings" link to the plugin's row on the Plugins screen, linking directly to WooCommerce > Settings > Shipping > Delivery Settings
 * Improved Blackout Dates admin UI: selected dates now display as removable tags below the calendar instead of a raw comma-separated list in the input box
@@ -91,6 +100,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 * Admin settings for blackout dates and slot limit
 
 == Upgrade Notice ==
+
+= 1.6 =
+Security hardening: server-side time slot validation and sanitized settings. Recommended for all users.
 
 = 1.5 =
 Adds a quick "Settings" link on the Plugins screen and a friendlier Blackout Dates picker (removable date tags instead of a raw comma list). No breaking changes.

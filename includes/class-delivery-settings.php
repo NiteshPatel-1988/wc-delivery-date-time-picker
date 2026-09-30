@@ -46,3 +46,33 @@ add_filter('woocommerce_get_settings_shipping', function ($settings, $current_se
 
     return $settings;
 }, 10, 2);
+
+// Sanitize blackout dates: keep only valid, unique Y-m-d dates.
+add_filter('woocommerce_admin_settings_sanitize_option_delidaam_delivery_blackout_dates', function ($value) {
+    $dates = [];
+
+    foreach (explode(',', (string) $value) as $date) {
+        $date = trim(sanitize_text_field($date));
+        $parsed = DateTime::createFromFormat('Y-m-d', $date);
+
+        if ($parsed && $parsed->format('Y-m-d') === $date) {
+            $dates[$date] = $date;
+        }
+    }
+
+    ksort($dates);
+
+    return implode(',', $dates);
+});
+
+// Sanitize the per-slot limit: non-negative integer.
+add_filter('woocommerce_admin_settings_sanitize_option_delidaam_delivery_slot_limit', function ($value) {
+    return (string) absint($value);
+});
+
+// Sanitize time slots: plain text, one per line, no blanks or duplicates.
+add_filter('woocommerce_admin_settings_sanitize_option_delidaam_delivery_time_slots', function ($value) {
+    $lines = array_map('sanitize_text_field', preg_split("/\r\n|\n|\r/", (string) $value));
+
+    return implode("\n", array_unique(array_filter($lines)));
+});

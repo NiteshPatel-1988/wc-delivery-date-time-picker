@@ -13,7 +13,6 @@ final class DELIDAAM_Blocks_Compat {
 
 	public static function init() {
 		add_action( 'woocommerce_init', array( __CLASS__, 'register_fields' ) );
-		add_action( 'woocommerce_validate_additional_field', array( __CLASS__, 'validate' ), 10, 3 );
 		add_action( 'woocommerce_blocks_validate_location_order_fields', array( __CLASS__, 'validate_order_fields' ), 10, 3 );
 		add_filter( 'woocommerce_sanitize_additional_field', array( __CLASS__, 'sanitize' ), 10, 2 );
 		add_action( 'woocommerce_set_additional_field_value', array( __CLASS__, 'mirror_to_legacy_meta' ), 10, 4 );
@@ -74,14 +73,12 @@ final class DELIDAAM_Blocks_Compat {
 				)
 			);
 		} catch ( \Throwable $exception ) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
-			trigger_error(
-				sprintf(
-					'Delivery Date & Time Slot Picker: failed to register checkout fields. %s',
-					esc_html( $exception->getMessage() )
-				),
-				E_USER_WARNING
-			);
+			if ( function_exists( 'wc_get_logger' ) ) {
+				wc_get_logger()->warning(
+					'Failed to register checkout fields: ' . $exception->getMessage(),
+					array( 'source' => 'delivery-date-time-slot-picker' )
+				);
+			}
 		}
 	}
 
@@ -118,31 +115,6 @@ final class DELIDAAM_Blocks_Compat {
 		}
 
 		return wc_clean( (string) $field_value );
-	}
-
-	/**
-	 * Validate fields
-	 */
-	public static function validate( \WP_Error $errors, $field_key, $field_value ) {
-		if ( 'delidaam/delivery_date' === $field_key ) {
-			$error = self::validate_delivery_date_callback( $field_value );
-
-			if ( is_wp_error( $error ) ) {
-				foreach ( $error->get_error_messages() as $message ) {
-					$errors->add( 'delidaam_invalid_delivery_date', $message );
-				}
-			}
-		}
-
-		if ( 'delidaam/delivery_time_slot' === $field_key ) {
-			$error = self::validate_time_slot_callback( $field_value );
-
-			if ( is_wp_error( $error ) ) {
-				foreach ( $error->get_error_messages() as $message ) {
-					$errors->add( 'delidaam_invalid_time_slot', $message );
-				}
-			}
-		}
 	}
 
 	/**
@@ -248,7 +220,7 @@ final class DELIDAAM_Blocks_Compat {
 
 		$order_ids = wc_get_orders(
 			array(
-				'limit'      => -1,
+				'limit'      => max( 1, (int) get_option( 'delidaam_delivery_slot_limit', 0 ) ),
 				'return'     => 'ids',
 				'status'     => array_values( $statuses ),
 				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
@@ -283,6 +255,24 @@ final class DELIDAAM_Blocks_Compat {
 				__( 'Please select a delivery time slot.', 'delivery-date-time-slot-picker-for-woocommerce' )
 			);
 		}
+
+		if ( ! in_array( $value, self::get_time_slots(), true ) ) {
+			return new \WP_Error(
+				'delidaam_invalid_time_slot',
+				__( 'Please select a valid delivery time slot.', 'delivery-date-time-slot-picker-for-woocommerce' )
+			);
+		}
+	}
+
+	/**
+	 * Get the configured time slots.
+	 *
+	 * @return string[]
+	 */
+	public static function get_time_slots() {
+		$rows = preg_split( "/\r\n|\n|\r/", (string) get_option( 'delidaam_delivery_time_slots', '' ) );
+
+		return array_values( array_filter( array_map( 'trim', $rows ) ) );
 	}
 
 	/**
@@ -312,7 +302,7 @@ final class DELIDAAM_Blocks_Compat {
 		$script_path = DELIDAAM_DELIVERY_PLUGIN_PATH . 'assets/js/delivery-datepicker.js';
 
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style( 'jquery-ui-css', DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/jquery-ui.css', array(), '1.12.1' );
+		wp_enqueue_style( 'delidaam-jquery-ui', DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/jquery-ui.css', array(), '1.12.1' );
 		wp_enqueue_style(
 			'delidaam-delivery-checkout',
 			DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/delivery-checkout.css',

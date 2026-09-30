@@ -34,8 +34,6 @@ class DELIDAAM_Delivery_Date_Time_Picker {
         add_action('woocommerce_order_details_after_customer_address', [$this, 'delidaam_display_delivery_fields_order_confirmation'], 15, 2);
         add_action('woocommerce_order_details_after_customer_details', [$this, 'delidaam_display_delivery_fields_order_confirmation_fallback'], 15, 1);
 
-        // Enqueue frontend scripts
-        add_action('wp_enqueue_scripts', [$this, 'delidaam_enqueue_scripts'], 99);
 
         add_action('admin_enqueue_scripts', [$this, 'delidaam_delivery_admin_scripts']);
         
@@ -45,57 +43,7 @@ class DELIDAAM_Delivery_Date_Time_Picker {
         }
     }
 
-    public function delidaam_enqueue_scripts() {
-        if ( $this->delidaam_is_checkout_page() ) {
-            $style_path  = DELIDAAM_DELIVERY_PLUGIN_PATH . 'assets/css/delivery-checkout.css';
-            $script_path = DELIDAAM_DELIVERY_PLUGIN_PATH . 'assets/js/delivery-datepicker.js';
-
-            wp_enqueue_script('jquery-ui-datepicker');
-            wp_enqueue_style('jquery-ui-css', DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/jquery-ui.css', [], '1.12.1');
-            wp_enqueue_style(
-                'delidaam-delivery-checkout',
-                DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/delivery-checkout.css',
-                [],
-                file_exists( $style_path ) ? filemtime( $style_path ) : false
-            );
-            wp_enqueue_script(
-                'delidaam-delivery-datepicker',
-                DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/js/delivery-datepicker.js',
-                ['jquery', 'jquery-ui-datepicker'],
-                file_exists( $script_path ) ? filemtime( $script_path ) : false,
-                true
-            );
-
-
-            $blackout_dates = explode(',', get_option('delidaam_delivery_blackout_dates', ''));
-            if (empty($blackout_dates[0])) {
-                $blackout_dates = [];
-            }
-            wp_localize_script(
-                'delidaam-delivery-datepicker',
-                'delidaamCheckout',
-                [
-                    'blackoutDates' => array_values( array_map( 'trim', $blackout_dates ) ),
-                    'dateFieldLabel' => __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ),
-                ]
-            );
-
-        }
-    }
-
-    private function delidaam_is_checkout_page() {
-        if ( function_exists( 'is_checkout' ) && is_checkout() ) {
-            return true;
-        }
-
-        if ( is_singular() ) {
-            return has_block( 'woocommerce/checkout', get_the_ID() );
-        }
-
-        return false;
-    }
-  
-    public function delidaam_delivery_admin_scripts($hook) {
+    public function delidaam_delivery_admin_scripts() {
         // Only load on WooCommerce settings pages
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $page = isset($_GET['page']) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
@@ -106,9 +54,9 @@ class DELIDAAM_Delivery_Date_Time_Picker {
             wp_enqueue_script('jquery-ui-datepicker');
             wp_enqueue_script(
                 'delidaam-delivery-multidate',
-                plugin_dir_url(__FILE__) . '../assets/js/admin-datepicker.js',
+                DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/js/admin-datepicker.js',
                 ['jquery', 'jquery-ui-datepicker'],
-                '1.2',
+                DELIDAAM_DELIVERY_VERSION,
                 true
             );
             wp_localize_script( 'delidaam-delivery-multidate', 'delidaamAdminDatepicker', [
@@ -116,12 +64,12 @@ class DELIDAAM_Delivery_Date_Time_Picker {
                 'removeLabel' => __( 'Remove %s', 'delivery-date-time-slot-picker-for-woocommerce' ),
                 'placeholder' => __( 'Click to select blackout dates', 'delivery-date-time-slot-picker-for-woocommerce' ),
             ] );
-            wp_enqueue_style('jquery-ui-css', DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/jquery-ui.css', [], '1.12.1');
+            wp_enqueue_style('delidaam-jquery-ui', DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/jquery-ui.css', [], '1.12.1');
             wp_enqueue_style(
                 'delidaam-admin-datepicker',
-                plugin_dir_url(__FILE__) . '../assets/css/admin-datepicker.css',
+                DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/admin-datepicker.css',
                 [],
-                '1.0'
+                DELIDAAM_DELIVERY_VERSION
             );
         }
     }
@@ -185,6 +133,8 @@ class DELIDAAM_Delivery_Date_Time_Picker {
 
         if (empty($delivery_time_slot)) {
             wc_add_notice(__('Please select a delivery time slot.', 'delivery-date-time-slot-picker-for-woocommerce'), 'error');
+        } elseif ( ! in_array( $delivery_time_slot, DELIDAAM_Blocks_Compat::get_time_slots(), true ) ) {
+            wc_add_notice(__('Please select a valid delivery time slot.', 'delivery-date-time-slot-picker-for-woocommerce'), 'error');
         } elseif ( $date_valid && class_exists( 'DELIDAAM_Blocks_Compat' ) && DELIDAAM_Blocks_Compat::is_slot_full( $delivery_date, $delivery_time_slot ) ) {
             wc_add_notice(__('The selected delivery time slot is fully booked for this date. Please choose another slot.', 'delivery-date-time-slot-picker-for-woocommerce'), 'error');
         }
@@ -437,11 +387,8 @@ class DELIDAAM_Delivery_Date_Time_Picker {
     }
 
     private function delidaam_get_time_slots() {
-        $time_slots_raw = get_option('delidaam_delivery_time_slots', '');
-        $lines = array_filter(array_map('trim', explode("\n", $time_slots_raw)));
-
         $slots = ['' => __('Select a time slot', 'delivery-date-time-slot-picker-for-woocommerce')];
-        foreach ($lines as $line) {
+        foreach (DELIDAAM_Blocks_Compat::get_time_slots() as $line) {
             $slots[$line] = $line;
         }
 

@@ -4,11 +4,20 @@ Let your customers select a delivery date and time slot during WooCommerce check
 
 ## 🔥 Features
 
-- Delivery Date Picker at checkout
-- Admin-configurable Delivery Time Slots
-- Limit orders per time slot
-- Blackout Dates via calendar (multi-select)
+- Delivery Date Picker at checkout (Classic and Blocks checkout)
+- Admin-configurable Delivery Time Slots, validated server-side
+- Limit orders per time slot (enforced at checkout)
+- Blackout Dates via calendar (multi-select, shown as removable tags)
+- HPOS and Cart & Checkout Blocks compatible
 - WooCommerce shipping method compatibility
+- Delivery details shown on the admin order screen, thank-you page and My Account
+- Quick "Settings" link on the Plugins screen
+
+## ✅ Requirements
+
+- WordPress 6.0+ (tested up to 7.1)
+- WooCommerce (tested with 11.1)
+- PHP 7.4+
 
 ## 📸 Screenshots
 

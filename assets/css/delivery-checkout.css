@@ -45,3 +45,41 @@
  * then keeps the label above the input at all times, matching the classic
  * checkout label-above-input design. No extra positioning rules needed here.
  */
+
+/* Datepicker month navigation arrows (pure CSS, no sprite image needed). */
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+	cursor: pointer;
+	top: 4px;
+	width: 2em;
+	height: 2em;
+}
+.ui-datepicker .ui-datepicker-prev span,
+.ui-datepicker .ui-datepicker-next span {
+	display: none;
+}
+.ui-datepicker .ui-datepicker-prev::after,
+.ui-datepicker .ui-datepicker-next::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 8px;
+	height: 8px;
+	margin-top: -5px;
+	border-top: 2px solid #333;
+	border-left: 2px solid #333;
+}
+.ui-datepicker .ui-datepicker-prev::after {
+	margin-left: -3px;
+	transform: rotate(-45deg);
+}
+.ui-datepicker .ui-datepicker-next::after {
+	margin-left: -6px;
+	transform: rotate(135deg);
+}
+.ui-datepicker .ui-datepicker-prev.ui-state-disabled,
+.ui-datepicker .ui-datepicker-next.ui-state-disabled {
+	opacity: 0.3;
+	cursor: default;
+}

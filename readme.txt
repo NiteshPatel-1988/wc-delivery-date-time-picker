@@ -4,7 +4,7 @@ Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.6
+Stable tag: 1.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 
 == Changelog ==
 
+= 1.7 =
+* Added: "Delivery Date" column on the WooCommerce Orders list (HPOS and legacy storage), with the time slot shown underneath
+* Improved: delivery details on the order-received, order-details and My Account pages now use one consistent card-style table, matching the Block checkout design
+* Improved: Block checkout order confirmation now shows "Delivery Details" instead of "Additional information" for orders with delivery data
+
 = 1.6 =
 * Security: delivery time slot is now validated server-side against the configured slots (Classic and Block checkout)
 * Security: settings values (blackout dates, slot limit, time slots) are now sanitized on save
@@ -100,6 +105,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 * Admin settings for blackout dates and slot limit
 
 == Upgrade Notice ==
+
+= 1.7 =
+Adds a Delivery Date column to the Orders list and unifies the delivery details design across Classic and Block order confirmation pages. No breaking changes.
 
 = 1.6 =
 Security hardening: server-side time slot validation and sanitized settings. Recommended for all users.

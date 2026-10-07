@@ -31,15 +31,75 @@ class DELIDAAM_Delivery_Date_Time_Picker {
         // Classic checkout thank-you page (always fires, HPOS-safe).
         add_action( 'woocommerce_thankyou', [ $this, 'delidaam_display_delivery_thankyou' ], 10 );
         // My-account order-details page.
-        add_action('woocommerce_order_details_after_customer_address', [$this, 'delidaam_display_delivery_fields_order_confirmation'], 15, 2);
         add_action('woocommerce_order_details_after_customer_details', [$this, 'delidaam_display_delivery_fields_order_confirmation_fallback'], 15, 1);
 
 
         add_action('admin_enqueue_scripts', [$this, 'delidaam_delivery_admin_scripts']);
-        
+        add_action('wp_enqueue_scripts', [$this, 'delidaam_enqueue_frontend_styles']);
+        // Blocks order confirmation: show "Delivery Details" instead of "Additional information".
+        add_filter('gettext', [$this, 'delidaam_filter_additional_info_heading'], 10, 3);
+        add_filter('render_block', [$this, 'delidaam_filter_additional_info_heading_block'], 10, 2);
+
+        // Orders list column (HPOS and legacy post-based storage).
+        add_filter('manage_woocommerce_page_wc-orders_columns', [$this, 'delidaam_add_orders_list_column']);
+        add_action('manage_woocommerce_page_wc-orders_custom_column', [$this, 'delidaam_render_orders_list_column_hpos'], 10, 2);
+        add_filter('manage_edit-shop_order_columns', [$this, 'delidaam_add_orders_list_column']);
+        add_action('manage_shop_order_posts_custom_column', [$this, 'delidaam_render_orders_list_column_legacy'], 10, 2);
+
         // Load settings page
         if (is_admin()) {
             include_once DELIDAAM_DELIVERY_PLUGIN_PATH . 'includes/class-delivery-settings.php';
+        }
+    }
+
+    /**
+     * Add a Delivery Date column after the order date column.
+     *
+     * @param array $columns Existing columns.
+     * @return array
+     */
+    public function delidaam_add_orders_list_column( $columns ) {
+        $new = [];
+        foreach ( $columns as $key => $label ) {
+            $new[ $key ] = $label;
+            if ( 'order_date' === $key ) {
+                $new['delidaam_delivery_date'] = esc_html__( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' );
+            }
+        }
+        if ( ! isset( $new['delidaam_delivery_date'] ) ) {
+            $new['delidaam_delivery_date'] = esc_html__( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' );
+        }
+        return $new;
+    }
+
+    public function delidaam_render_orders_list_column_hpos( $column, $order ) {
+        if ( 'delidaam_delivery_date' !== $column ) {
+            return;
+        }
+        $this->delidaam_output_orders_list_value( $order );
+    }
+
+    public function delidaam_render_orders_list_column_legacy( $column, $post_id ) {
+        if ( 'delidaam_delivery_date' !== $column ) {
+            return;
+        }
+        $this->delidaam_output_orders_list_value( wc_get_order( $post_id ) );
+    }
+
+    private function delidaam_output_orders_list_value( $order ) {
+        if ( ! $order instanceof WC_Order ) {
+            echo '&ndash;';
+            return;
+        }
+        $date = (string) $order->get_meta( self::DELIVERY_DATE_META_KEY );
+        $slot = (string) $order->get_meta( self::DELIVERY_TIME_SLOT_META_KEY );
+        if ( '' === $date ) {
+            echo '&ndash;';
+            return;
+        }
+        echo esc_html( $date );
+        if ( '' !== $slot ) {
+            echo '<br><small>' . esc_html( $slot ) . '</small>';
         }
     }
 
@@ -244,6 +304,11 @@ class DELIDAAM_Delivery_Date_Time_Picker {
             return;
         }
 
+        // Blocks orders are rendered by WooCommerce itself (restyled via CSS); avoid a duplicate.
+        if ( $this->delidaam_order_uses_blocks_additional_fields( $order ) ) {
+            return;
+        }
+
         $delivery_date      = $order->get_meta( self::DELIVERY_DATE_META_KEY );
         $delivery_time_slot = $order->get_meta( self::DELIVERY_TIME_SLOT_META_KEY );
 
@@ -253,17 +318,7 @@ class DELIDAAM_Delivery_Date_Time_Picker {
 
         self::$rendered_confirmation_orders[ $order->get_id() ] = true;
 
-        echo '<div class="woocommerce-order-delivery-details">';
-
-        if ( '' !== $delivery_date ) {
-            echo '<p><strong>' . esc_html__( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ) . ':</strong> ' . esc_html( $delivery_date ) . '</p>';
-        }
-
-        if ( '' !== $delivery_time_slot ) {
-            echo '<p><strong>' . esc_html__( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ) . ':</strong> ' . esc_html( $delivery_time_slot ) . '</p>';
-        }
-
-        echo '</div>';
+        $this->delidaam_render_delivery_table( $delivery_date, $delivery_time_slot );
     }
 
     /**
@@ -277,6 +332,11 @@ class DELIDAAM_Delivery_Date_Time_Picker {
             return;
         }
 
+        // Blocks orders are rendered by WooCommerce itself (restyled via CSS); avoid a duplicate.
+        if ( $this->delidaam_order_uses_blocks_additional_fields( $order ) ) {
+            return;
+        }
+
         $delivery_date      = $order->get_meta( self::DELIVERY_DATE_META_KEY );
         $delivery_time_slot = $order->get_meta( self::DELIVERY_TIME_SLOT_META_KEY );
 
@@ -286,17 +346,7 @@ class DELIDAAM_Delivery_Date_Time_Picker {
 
         self::$rendered_confirmation_orders[ $order->get_id() ] = true;
 
-        echo '<div class="woocommerce-order-delivery-details">';
-
-        if ( '' !== $delivery_date ) {
-            echo '<p><strong>' . esc_html__( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ) . ':</strong> ' . esc_html( $delivery_date ) . '</p>';
-        }
-
-        if ( '' !== $delivery_time_slot ) {
-            echo '<p><strong>' . esc_html__( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ) . ':</strong> ' . esc_html( $delivery_time_slot ) . '</p>';
-        }
-
-        echo '</div>';
+        $this->delidaam_render_delivery_table( $delivery_date, $delivery_time_slot );
     }
 
     /**
@@ -327,28 +377,81 @@ class DELIDAAM_Delivery_Date_Time_Picker {
             return;
         }
 
-        echo '<section class="woocommerce-order-delivery-details">';
+        $this->delidaam_render_delivery_table( $delivery_date, $delivery_time_slot );
+    }
+
+    /**
+     * Whether the order shown on the current order-received / view-order page has delivery data.
+     *
+     * @return bool
+     */
+    private function delidaam_current_order_has_delivery_data() {
+        if ( ! function_exists( 'is_wc_endpoint_url' ) ) {
+            return false;
+        }
+        $order_id = 0;
+        if ( is_wc_endpoint_url( 'order-received' ) ) {
+            $order_id = absint( get_query_var( 'order-received' ) );
+        } elseif ( is_wc_endpoint_url( 'view-order' ) ) {
+            $order_id = absint( get_query_var( 'view-order' ) );
+        }
+        if ( ! $order_id ) {
+            return false;
+        }
+        $order = wc_get_order( $order_id );
+        return $order && ( '' !== (string) $order->get_meta( self::DELIVERY_DATE_META_KEY ) || '' !== (string) $order->get_meta( self::DELIVERY_TIME_SLOT_META_KEY ) );
+    }
+
+    public function delidaam_filter_additional_info_heading( $translation, $text, $domain ) {
+        if ( 'Additional information' === $text && 'woocommerce' === $domain && $this->delidaam_current_order_has_delivery_data() ) {
+            return __( 'Delivery Details', 'delivery-date-time-slot-picker-for-woocommerce' );
+        }
+        return $translation;
+    }
+
+    public function delidaam_filter_additional_info_heading_block( $block_content, $block ) {
+        if ( isset( $block['blockName'] ) && 'core/heading' === $block['blockName'] && false !== strpos( $block_content, 'Additional information' ) && $this->delidaam_current_order_has_delivery_data() ) {
+            return str_replace( 'Additional information', esc_html__( 'Delivery Details', 'delivery-date-time-slot-picker-for-woocommerce' ), $block_content );
+        }
+        return $block_content;
+    }
+
+    /**
+     * Output the delivery details as a styled table.
+     *
+     * @param string $delivery_date      Delivery date.
+     * @param string $delivery_time_slot Delivery time slot.
+     * @return void
+     */
+    private function delidaam_render_delivery_table( $delivery_date, $delivery_time_slot ) {
+        $rows = [
+            esc_html__( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' )      => (string) $delivery_date,
+            esc_html__( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ) => (string) $delivery_time_slot,
+        ];
+
+        echo '<section class="woocommerce-order-delivery-details delidaam-delivery-details">';
         echo '<h2 class="woocommerce-order-details__title">' . esc_html__( 'Delivery Details', 'delivery-date-time-slot-picker-for-woocommerce' ) . '</h2>';
-        echo '<table class="woocommerce-table woocommerce-table--order-details shop_table order_details">';
-        echo '<tbody>';
-
-        if ( '' !== $delivery_date ) {
-            echo '<tr>';
-            echo '<th scope="row">' . esc_html__( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ) . '</th>';
-            echo '<td>' . esc_html( $delivery_date ) . '</td>';
-            echo '</tr>';
+        echo '<table class="woocommerce-table shop_table delidaam-delivery-table"><tbody>';
+        foreach ( $rows as $label => $value ) {
+            if ( '' === $value ) {
+                continue;
+            }
+            echo '<tr><th scope="row">' . esc_html( $label ) . '</th><td>' . esc_html( $value ) . '</td></tr>';
         }
-
-        if ( '' !== $delivery_time_slot ) {
-            echo '<tr>';
-            echo '<th scope="row">' . esc_html__( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ) . '</th>';
-            echo '<td>' . esc_html( $delivery_time_slot ) . '</td>';
-            echo '</tr>';
-        }
-
-        echo '</tbody>';
-        echo '</table>';
+        echo '</tbody></table>';
         echo '</section>';
+    }
+
+    public function delidaam_enqueue_frontend_styles() {
+        if ( ! function_exists( 'is_wc_endpoint_url' ) || ! ( is_wc_endpoint_url( 'order-received' ) || is_wc_endpoint_url( 'view-order' ) ) ) {
+            return;
+        }
+        wp_enqueue_style(
+            'delidaam-order-details',
+            DELIDAAM_DELIVERY_PLUGIN_URL . 'assets/css/delivery-order-details.css',
+            [],
+            DELIDAAM_DELIVERY_VERSION
+        );
     }
 
     /**

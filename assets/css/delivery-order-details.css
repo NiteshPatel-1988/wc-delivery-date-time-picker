@@ -1,0 +1,75 @@
+/* Matches the WooCommerce Blocks "Additional information" card. */
+.delidaam-delivery-details {
+	margin-bottom: 2em !important;
+}
+
+.delidaam-delivery-details .delidaam-delivery-table {
+	display: block;
+	width: 100% !important;
+	margin: 0;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+	border-collapse: separate;
+	overflow: hidden;
+}
+.delidaam-delivery-details .delidaam-delivery-table tbody {
+	display: block;
+}
+.delidaam-delivery-details .delidaam-delivery-table tr {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1em;
+	border: 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+	background: transparent;
+}
+.delidaam-delivery-details .delidaam-delivery-table tr:last-child {
+	border-bottom: 0;
+}
+.delidaam-delivery-details .delidaam-delivery-table th,
+.delidaam-delivery-details .delidaam-delivery-table td {
+	display: block;
+	width: auto;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+}
+.delidaam-delivery-details .delidaam-delivery-table th {
+	font-weight: 700;
+	text-align: left;
+}
+.delidaam-delivery-details .delidaam-delivery-table td {
+	text-align: right;
+}
+
+/* WooCommerce Blocks orders: restyle the native additional fields list to the same card. */
+.wc-block-order-confirmation-additional-fields-wrapper {
+	margin: 0 0 2em;
+}
+.wc-block-order-confirmation-additional-fields-wrapper .wc-block-components-additional-fields-list {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	margin: 0;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+	overflow: hidden;
+}
+.wc-block-order-confirmation-additional-fields-wrapper .wc-block-components-additional-fields-list dt,
+.wc-block-order-confirmation-additional-fields-wrapper .wc-block-components-additional-fields-list dd {
+	margin: 0;
+	padding: 1.25em;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+.wc-block-order-confirmation-additional-fields-wrapper .wc-block-components-additional-fields-list dt {
+	font-weight: 700;
+	text-align: left;
+}
+.wc-block-order-confirmation-additional-fields-wrapper .wc-block-components-additional-fields-list dd {
+	text-align: right;
+}
+.wc-block-order-confirmation-additional-fields-wrapper .wc-block-components-additional-fields-list dt:nth-last-of-type(1),
+.wc-block-order-confirmation-additional-fields-wrapper .wc-block-components-additional-fields-list dd:nth-last-of-type(1) {
+	border-bottom: 0;
+}

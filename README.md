@@ -12,6 +12,8 @@ Let your customers select a delivery date and time slot during WooCommerce check
 - WooCommerce shipping method compatibility
 - Delivery details shown on the admin order screen, thank-you page and My Account
 - Quick "Settings" link on the Plugins screen
+- Delivery Date column on the Orders list
+- Consistent "Delivery Details" card on order confirmation (Classic and Blocks)
 
 ## ✅ Requirements
 
@@ -34,6 +36,16 @@ Let your customers select a delivery date and time slot during WooCommerce check
 ## 🌍 Translations
 
 This plugin is translation-ready. `.pot` file is located in `/languages/`.
+
+## 📝 Changelog
+
+### 1.7
+- Added a Delivery Date column (with time slot) to the WooCommerce Orders list, HPOS and legacy storage
+- Unified card-style Delivery Details table on order-received, order-details and My Account pages
+- Blocks order confirmation heading now reads "Delivery Details" instead of "Additional information"
+- Added `delivery-order-details.css`, loaded only on order pages
+
+See `readme.txt` for the full history.
 
 ## 📜 License
 

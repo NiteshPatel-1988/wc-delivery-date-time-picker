@@ -155,6 +155,92 @@ final class DELIDAAM_Blocks_Compat {
 				__( 'The selected delivery date is not available.', 'delivery-date-time-slot-picker-for-woocommerce' )
 			);
 		}
+
+		if ( in_array( (int) $date->format( 'w' ), self::get_disabled_weekdays(), true ) ) {
+			return new \WP_Error(
+				'delidaam_disabled_weekday',
+				__( 'Delivery is not available on the selected day of the week. Please choose a different date.', 'delivery-date-time-slot-picker-for-woocommerce' )
+			);
+		}
+
+		if ( $value < self::get_earliest_date() ) {
+			return new \WP_Error(
+				'delidaam_too_soon',
+				__( 'The selected delivery date is too soon. Please choose a later date.', 'delivery-date-time-slot-picker-for-woocommerce' )
+			);
+		}
+
+		$latest = self::get_latest_date();
+
+		if ( '' !== $latest && $value > $latest ) {
+			return new \WP_Error(
+				'delidaam_too_far',
+				__( 'The selected delivery date is too far in the future. Please choose an earlier date.', 'delivery-date-time-slot-picker-for-woocommerce' )
+			);
+		}
+	}
+
+	/**
+	 * Get the weekdays (0 = Sunday ... 6 = Saturday) on which delivery is disabled.
+	 *
+	 * The setting stores Sunday as 7 because WooCommerce drops "0" when saving a multiselect.
+	 *
+	 * @return int[]
+	 */
+	public static function get_disabled_weekdays() {
+		$days = array();
+
+		foreach ( (array) get_option( 'delidaam_delivery_disabled_weekdays', array() ) as $day ) {
+			if ( is_numeric( $day ) && (int) $day >= 1 && (int) $day <= 7 ) {
+				$weekday          = (int) $day % 7;
+				$days[ $weekday ] = $weekday;
+			}
+		}
+
+		// Never block every day of the week.
+		return count( $days ) >= 7 ? array() : array_values( $days );
+	}
+
+	/**
+	 * Minimum lead time in days.
+	 *
+	 * @return int
+	 */
+	public static function get_min_days() {
+		return max( 0, (int) get_option( 'delidaam_delivery_min_days', 0 ) );
+	}
+
+	/**
+	 * Maximum booking window in days (0 = unlimited).
+	 *
+	 * @return int
+	 */
+	public static function get_max_days() {
+		return max( 0, (int) get_option( 'delidaam_delivery_max_days', 0 ) );
+	}
+
+	/**
+	 * Earliest bookable date (Y-m-d) in the store timezone.
+	 *
+	 * @return string
+	 */
+	private static function get_earliest_date() {
+		return gmdate( 'Y-m-d', strtotime( current_time( 'Y-m-d' ) . ' UTC' ) + self::get_min_days() * DAY_IN_SECONDS );
+	}
+
+	/**
+	 * Latest bookable date (Y-m-d) in the store timezone, or an empty string for no limit.
+	 *
+	 * @return string
+	 */
+	private static function get_latest_date() {
+		$max = self::get_max_days();
+
+		if ( $max <= 0 ) {
+			return '';
+		}
+
+		return gmdate( 'Y-m-d', strtotime( current_time( 'Y-m-d' ) . ' UTC' ) + $max * DAY_IN_SECONDS );
 	}
 
 	/**
@@ -321,7 +407,10 @@ final class DELIDAAM_Blocks_Compat {
 			'delidaam-delivery-datepicker',
 			'delidaamCheckout',
 			array(
-				'blackoutDates' => self::get_blackout_dates(),
+				'blackoutDates'   => self::get_blackout_dates(),
+				'disabledWeekdays' => self::get_disabled_weekdays(),
+				'minDays'         => self::get_min_days(),
+				'maxDays'         => self::get_max_days(),
 				'dateFieldLabel' => __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ),
 			)
 		);

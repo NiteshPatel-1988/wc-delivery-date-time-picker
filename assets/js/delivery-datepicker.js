@@ -24,6 +24,25 @@ jQuery( function( $ ) {
 		return [];
 	}
 
+	function getDisabledWeekdays() {
+		if (
+			window.delidaamCheckout &&
+			Array.isArray( window.delidaamCheckout.disabledWeekdays )
+		) {
+			return window.delidaamCheckout.disabledWeekdays.map( Number );
+		}
+
+		return [];
+	}
+
+	function getMinDays() {
+		return window.delidaamCheckout ? parseInt( window.delidaamCheckout.minDays, 10 ) || 0 : 0;
+	}
+
+	function getMaxDays() {
+		return window.delidaamCheckout ? parseInt( window.delidaamCheckout.maxDays, 10 ) || 0 : 0;
+	}
+
 	function isBlockCheckoutField( input ) {
 		return (
 			input.id === 'order-delidaam-delivery_date' ||
@@ -153,7 +172,8 @@ jQuery( function( $ ) {
 		$input.datepicker(
 			{
 				dateFormat: 'yy-mm-dd',
-				minDate: 0,
+				minDate: getMinDays(),
+				maxDate: getMaxDays() > 0 ? getMaxDays() : null,
 				beforeShow: function( currentInput, instance ) {
 					window.setTimeout(
 						function() {
@@ -166,7 +186,9 @@ jQuery( function( $ ) {
 					var blockedDates = getBlockedDates();
 					var dateString = $.datepicker.formatDate( 'yy-mm-dd', date );
 
-					return [ -1 === blockedDates.indexOf( dateString ) ];
+					var weekdayBlocked = -1 !== getDisabledWeekdays().indexOf( date.getDay() );
+
+					return [ -1 === blockedDates.indexOf( dateString ) && ! weekdayBlocked ];
 				},
 				onSelect: function( dateText ) {
 					syncSelectedDate( input, dateText );

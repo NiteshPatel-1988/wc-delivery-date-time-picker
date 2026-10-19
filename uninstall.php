@@ -11,4 +11,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'delidaam_delivery_blackout_dates' );
 delete_option( 'delidaam_delivery_slot_limit' );
+delete_option( 'delidaam_delivery_disabled_weekdays' );
+delete_option( 'delidaam_delivery_min_days' );
+delete_option( 'delidaam_delivery_max_days' );
 delete_option( 'delidaam_delivery_time_slots' );

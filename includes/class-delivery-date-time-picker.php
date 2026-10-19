@@ -26,7 +26,6 @@ class DELIDAAM_Delivery_Date_Time_Picker {
         });
         add_action('woocommerce_checkout_process', [$this, 'delidaam_validate_delivery_fields']);
         add_action('woocommerce_checkout_create_order', [$this, 'delidaam_add_delivery_fields_to_order'], 10, 2);
-        add_action('woocommerce_checkout_update_order_meta', [$this, 'delidaam_save_delivery_fields']);
         add_action('woocommerce_admin_order_data_after_billing_address', [$this, 'delidaam_display_delivery_fields_admin'], 10, 1);
         // Classic checkout thank-you page (always fires, HPOS-safe).
         add_action( 'woocommerce_thankyou', [ $this, 'delidaam_display_delivery_thankyou' ], 10 );
@@ -200,41 +199,6 @@ class DELIDAAM_Delivery_Date_Time_Picker {
         }
     }
 
-    public function delidaam_save_delivery_fields( $order_id ) {
-        $nonce = isset( $_POST['delidaam_delivery_nonce_field'] ) ? sanitize_text_field( wp_unslash( $_POST['delidaam_delivery_nonce_field'] ) ) : '';
-
-        if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'delidaam_delivery_nonce_action' ) ) {
-            return;
-        }
-
-        $order = wc_get_order( $order_id );
-        if ( ! $order ) {
-            return;
-        }
-
-        $needs_save = false;
-
-        if ( isset( $_POST['delidaam_delivery_date'] ) ) {
-            $delivery_date = sanitize_text_field( wp_unslash( $_POST['delidaam_delivery_date'] ) );
-            if ( ! empty( $delivery_date ) ) {
-                $order->update_meta_data( self::DELIVERY_DATE_META_KEY, $delivery_date );
-                $needs_save = true;
-            }
-        }
-
-        if ( isset( $_POST['delidaam_delivery_time_slot'] ) ) {
-            $delivery_time_slot = sanitize_text_field( wp_unslash( $_POST['delidaam_delivery_time_slot'] ) );
-            if ( ! empty( $delivery_time_slot ) ) {
-                $order->update_meta_data( self::DELIVERY_TIME_SLOT_META_KEY, $delivery_time_slot );
-                $needs_save = true;
-            }
-        }
-
-        if ( $needs_save ) {
-            $order->save();
-        }
-    }
-
     /**
      * Save delivery fields to the order object during checkout creation.
      *
@@ -286,39 +250,6 @@ class DELIDAAM_Delivery_Date_Time_Picker {
         if ( '' !== $delivery_time_slot ) {
             echo '<p><strong>' . esc_html__( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ) . ':</strong> ' . esc_html( $delivery_time_slot ) . '</p>';
         }
-    }
-
-    /**
-     * Display delivery fields on the classic thank you / order details page.
-     *
-     * @param string   $address_type Address type.
-     * @param WC_Order $order        Order object.
-     * @return void
-     */
-    public function delidaam_display_delivery_fields_order_confirmation( $address_type, $order ) {
-        if ( 'billing' !== $address_type ) {
-            return;
-        }
-
-        if ( $this->delidaam_has_rendered_confirmation_fields( $order ) ) {
-            return;
-        }
-
-        // Blocks orders are rendered by WooCommerce itself (restyled via CSS); avoid a duplicate.
-        if ( $this->delidaam_order_uses_blocks_additional_fields( $order ) ) {
-            return;
-        }
-
-        $delivery_date      = $order->get_meta( self::DELIVERY_DATE_META_KEY );
-        $delivery_time_slot = $order->get_meta( self::DELIVERY_TIME_SLOT_META_KEY );
-
-        if ( '' === $delivery_date && '' === $delivery_time_slot ) {
-            return;
-        }
-
-        self::$rendered_confirmation_orders[ $order->get_id() ] = true;
-
-        $this->delidaam_render_delivery_table( $delivery_date, $delivery_time_slot );
     }
 
     /**
@@ -425,8 +356,8 @@ class DELIDAAM_Delivery_Date_Time_Picker {
      */
     private function delidaam_render_delivery_table( $delivery_date, $delivery_time_slot ) {
         $rows = [
-            esc_html__( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' )      => (string) $delivery_date,
-            esc_html__( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ) => (string) $delivery_time_slot,
+            __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' )      => (string) $delivery_date,
+            __( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ) => (string) $delivery_time_slot,
         ];
 
         echo '<section class="woocommerce-order-delivery-details delidaam-delivery-details">';
@@ -461,22 +392,8 @@ class DELIDAAM_Delivery_Date_Time_Picker {
      * @return bool
      */
     private function delidaam_order_uses_blocks_additional_fields( $order ) {
-        if ( ! class_exists( '\Automattic\WooCommerce\Blocks\Package' ) || ! class_exists( '\Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields' ) ) {
-            return false;
-        }
-
-        try {
-            $checkout_fields = \Automattic\WooCommerce\Blocks\Package::container()->get(
-                \Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields::class
-            );
-
-            $delivery_date = $checkout_fields->get_field_from_object( 'delidaam/delivery_date', $order, 'other' );
-            $delivery_time_slot = $checkout_fields->get_field_from_object( 'delidaam/delivery_time_slot', $order, 'other' );
-
-            return ( '' !== (string) $delivery_date || '' !== (string) $delivery_time_slot );
-        } catch ( \Throwable $exception ) {
-            return false;
-        }
+        // Block checkout stores "other" location fields as order meta prefixed with _wc_other/.
+        return ( '' !== (string) $order->get_meta( '_wc_other/delidaam/delivery_date' ) || '' !== (string) $order->get_meta( '_wc_other/delidaam/delivery_time_slot' ) );
     }
 
     /**

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Delivery Date & Time Slot Picker for WooCommerce 1.5\n"
+"Project-Id-Version: Delivery Date & Time Slot Picker for WooCommerce 1.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/delivery-date-time-slot-picker-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-15T10:43:46+02:00\n"
+"POT-Creation-Date: 2026-10-19T12:37:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: delivery-date-time-slot-picker-for-woocommerce\n"
@@ -39,87 +39,99 @@ msgstr ""
 msgid "https://github.com/NiteshPatel-1988"
 msgstr ""
 
-#: delivery-date-time-slot-picker-for-woocommerce.php:37
-msgid "Delivery Date & Time Slot Picker Plugin requires WooCommerce to be installed and active."
-msgstr ""
-
-#: delivery-date-time-slot-picker-for-woocommerce.php:77
+#: delivery-date-time-slot-picker-for-woocommerce.php:91
 msgid "Settings"
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:49
-#: includes/class-delidaam-blocks-compat.php:335
-#: includes/class-delivery-date-time-picker.php:79
-#: includes/class-delivery-date-time-picker.php:139
-#: includes/class-delivery-date-time-picker.php:273
-#: includes/class-delivery-date-time-picker.php:309
-#: includes/class-delivery-date-time-picker.php:342
-#: includes/class-delivery-date-time-picker.php:387
+#: includes/class-delidaam-blocks-compat.php:48
+#: includes/class-delidaam-blocks-compat.php:414
+#: includes/class-delivery-date-time-picker.php:65
+#: includes/class-delivery-date-time-picker.php:69
+#: includes/class-delivery-date-time-picker.php:146
+#: includes/class-delivery-date-time-picker.php:247
+#: includes/class-delivery-date-time-picker.php:359
 msgid "Delivery Date"
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:58
-#: includes/class-delivery-date-time-picker.php:141
+#: includes/class-delidaam-blocks-compat.php:57
+#: includes/class-delivery-date-time-picker.php:148
 msgid "Select a delivery date"
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:66
-#: includes/class-delivery-date-time-picker.php:152
-#: includes/class-delivery-date-time-picker.php:277
-#: includes/class-delivery-date-time-picker.php:313
-#: includes/class-delivery-date-time-picker.php:346
-#: includes/class-delivery-date-time-picker.php:394
+#: includes/class-delidaam-blocks-compat.php:65
+#: includes/class-delivery-date-time-picker.php:159
+#: includes/class-delivery-date-time-picker.php:251
+#: includes/class-delivery-date-time-picker.php:360
 msgid "Delivery Time Slot"
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:72
-#: includes/class-delivery-date-time-picker.php:443
+#: includes/class-delidaam-blocks-compat.php:71
+#: includes/class-delivery-date-time-picker.php:410
 msgid "Select a time slot"
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:160
-#: includes/class-delivery-date-time-picker.php:173
+#: includes/class-delidaam-blocks-compat.php:132
+#: includes/class-delivery-date-time-picker.php:180
 msgid "Please select a delivery date."
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:169
+#: includes/class-delidaam-blocks-compat.php:141
 msgid "Please enter a valid delivery date."
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:176
+#: includes/class-delidaam-blocks-compat.php:148
 msgid "The selected delivery date has already passed. Please choose a different date."
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:183
+#: includes/class-delidaam-blocks-compat.php:155
 msgid "The selected delivery date is not available."
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:208
-#: includes/class-delivery-date-time-picker.php:189
+#: includes/class-delidaam-blocks-compat.php:162
+msgid "Delivery is not available on the selected day of the week. Please choose a different date."
+msgstr ""
+
+#: includes/class-delidaam-blocks-compat.php:169
+msgid "The selected delivery date is too soon. Please choose a later date."
+msgstr ""
+
+#: includes/class-delidaam-blocks-compat.php:178
+msgid "The selected delivery date is too far in the future. Please choose an earlier date."
+msgstr ""
+
+#: includes/class-delidaam-blocks-compat.php:266
+#: includes/class-delivery-date-time-picker.php:198
 msgid "The selected delivery time slot is fully booked for this date. Please choose another slot."
 msgstr ""
 
-#: includes/class-delidaam-blocks-compat.php:283
-#: includes/class-delivery-date-time-picker.php:187
+#: includes/class-delidaam-blocks-compat.php:341
+#: includes/class-delivery-date-time-picker.php:194
 msgid "Please select a delivery time slot."
 msgstr ""
 
+#: includes/class-delidaam-blocks-compat.php:348
+#: includes/class-delivery-date-time-picker.php:196
+msgid "Please select a valid delivery time slot."
+msgstr ""
+
 #. translators: %s: date being removed from the blackout dates list.
-#: includes/class-delivery-date-time-picker.php:116
+#: includes/class-delivery-date-time-picker.php:123
 #, php-format
 msgid "Remove %s"
 msgstr ""
 
-#: includes/class-delivery-date-time-picker.php:117
+#: includes/class-delivery-date-time-picker.php:124
 msgid "Click to select blackout dates"
 msgstr ""
 
-#: includes/class-delivery-date-time-picker.php:134
-#: includes/class-delivery-date-time-picker.php:381
+#: includes/class-delivery-date-time-picker.php:141
+#: includes/class-delivery-date-time-picker.php:338
+#: includes/class-delivery-date-time-picker.php:345
+#: includes/class-delivery-date-time-picker.php:364
 msgid "Delivery Details"
 msgstr ""
 
-#: includes/class-delivery-date-time-picker.php:164
+#: includes/class-delivery-date-time-picker.php:171
 msgid "Delivery details could not be verified. Please refresh and try again."
 msgstr ""
 
@@ -141,17 +153,69 @@ msgid "Select blackout dates (you can select multiple)."
 msgstr ""
 
 #: includes/class-delivery-settings.php:28
-msgid "Max Orders per Time Slot"
+msgid "Disabled Weekdays"
 msgstr ""
 
-#: includes/class-delivery-settings.php:32
-msgid "Limit the number of deliveries allowed per slot per day."
+#: includes/class-delivery-settings.php:34
+msgid "Monday"
 msgstr ""
 
 #: includes/class-delivery-settings.php:35
-msgid "Delivery Time Slots (one per line)"
+msgid "Tuesday"
+msgstr ""
+
+#: includes/class-delivery-settings.php:36
+msgid "Wednesday"
+msgstr ""
+
+#: includes/class-delivery-settings.php:37
+msgid "Thursday"
 msgstr ""
 
 #: includes/class-delivery-settings.php:38
+msgid "Friday"
+msgstr ""
+
+#: includes/class-delivery-settings.php:39
+msgid "Saturday"
+msgstr ""
+
+#: includes/class-delivery-settings.php:40
+msgid "Sunday"
+msgstr ""
+
+#: includes/class-delivery-settings.php:42
+msgid "Days of the week on which delivery is not available. Leave empty to allow every day."
+msgstr ""
+
+#: includes/class-delivery-settings.php:46
+msgid "Minimum Lead Time (days)"
+msgstr ""
+
+#: includes/class-delivery-settings.php:51
+msgid "Earliest delivery date, counted in days from today. 0 allows same-day delivery, 2 means the earliest date is the day after tomorrow."
+msgstr ""
+
+#: includes/class-delivery-settings.php:55
+msgid "Maximum Booking Window (days)"
+msgstr ""
+
+#: includes/class-delivery-settings.php:60
+msgid "How many days ahead customers can book, counted from today. Leave 0 for no limit."
+msgstr ""
+
+#: includes/class-delivery-settings.php:64
+msgid "Max Orders per Time Slot"
+msgstr ""
+
+#: includes/class-delivery-settings.php:68
+msgid "Limit the number of deliveries allowed per slot per day."
+msgstr ""
+
+#: includes/class-delivery-settings.php:71
+msgid "Delivery Time Slots (one per line)"
+msgstr ""
+
+#: includes/class-delivery-settings.php:74
 msgid "Enter one time slot per line. Example: 10:00 AM - 12:00 PM"
 msgstr ""

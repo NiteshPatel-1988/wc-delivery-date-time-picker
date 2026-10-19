@@ -4,7 +4,7 @@ Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.7
+Stable tag: 1.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,7 @@ Adds a delivery date and time slot picker to WooCommerce checkout (Classic and B
 * Delivery Time Slot select styled to match other WooCommerce checkout fields
 * Add **multiple blackout dates** via calendar
 * Limit max orders per time slot
+* **Disable weekdays** (e.g. no Sunday delivery), set a **minimum lead time** and a **maximum booking window**
 * Works with all WooCommerce shipping methods
 * **HPOS compatible** - works with WooCommerce High Performance Order Storage
 * Delivery details displayed on the Classic checkout thank-you page and order confirmation
@@ -39,6 +40,12 @@ Yes. The plugin supports both Classic Checkout and WooCommerce Blocks Checkout. 
 = Can I disable certain delivery dates? =
 Yes, use the "Blackout Dates" calendar in plugin settings.
 
+= Can I turn off delivery on certain days of the week? =
+Yes, choose them in "Disabled Weekdays" in plugin settings.
+
+= Can I require notice before delivery, or limit how far ahead customers book? =
+Yes. "Minimum Lead Time" sets the earliest delivery date in days from today, and "Maximum Booking Window" sets the furthest date customers can pick.
+
 = How can I define time slots? =
 Use the "Delivery Time Slots" field to define one time slot per line.
 
@@ -50,10 +57,19 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 
 == Screenshots ==
 1. Delivery date and time slot fields on Classic & Block-based checkout
-2. Admin settings for configuring blackout dates and slots
+2. Delivery Settings: blackout dates, disabled weekdays, lead time, booking window, slot limit and time slots
 3. Delivery date and time slot shown on the WooCommerce admin order details screen
+4. Checkout calendar with disabled weekdays, blackout dates and lead time applied
+5. Delivery Date column on the WooCommerce Orders list
 
 == Changelog ==
+
+= 1.8 =
+* Added: "Disabled Weekdays" setting to block delivery on chosen days of the week (e.g. Sundays)
+* Added: "Minimum Lead Time" setting to set the earliest delivery date in days from today
+* Added: "Maximum Booking Window" setting to limit how far ahead customers can book
+* All three rules are enforced in the date picker and server-side on Classic and Block checkout
+* Regenerated the translation (.pot) template with the new strings
 
 = 1.7 =
 * Added: "Delivery Date" column on the WooCommerce Orders list (HPOS and legacy storage), with the time slot shown underneath
@@ -105,6 +121,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 * Admin settings for blackout dates and slot limit
 
 == Upgrade Notice ==
+
+= 1.8 =
+Adds Disabled Weekdays, Minimum Lead Time and Maximum Booking Window settings. All are off by default, so existing stores are unaffected. No breaking changes.
 
 = 1.7 =
 Adds a Delivery Date column to the Orders list and unifies the delivery details design across Classic and Block order confirmation pages. No breaking changes.

@@ -17,11 +17,12 @@ Let your customers select a delivery date and time slot during WooCommerce check
 - Quick "Settings" link on the Plugins screen
 - Delivery Date column on the Orders list
 - Consistent "Delivery Details" card on order confirmation (Classic and Blocks)
+- Delivery details in WooCommerce order emails (customer and admin), can be turned off
 
 ## ✅ Requirements
 
 - WordPress 6.0+ (tested up to 7.1)
-- WooCommerce (tested with 11.1)
+- WooCommerce (tested with 11.2)
 - PHP 7.4+
 
 ## 📸 Screenshots
@@ -64,6 +65,13 @@ All rules are applied in the date picker and re-checked server-side on both Clas
 This plugin is translation-ready. `.pot` file is located in `/languages/`.
 
 ## 📝 Changelog
+
+### 1.9
+- Added delivery date and time slot to WooCommerce order emails (HTML and plain text, customer and admin), for Classic and Block checkout
+- Added a "Show in Emails" setting (enabled by default)
+- Fixed Block checkout emails repeating the delivery details under "Additional information"
+- Code now follows WordPress coding standards
+- Tested with WordPress 7.1 and WooCommerce 11.2
 
 ### 1.8
 - Added a Disabled Weekdays setting to block delivery on chosen days of the week

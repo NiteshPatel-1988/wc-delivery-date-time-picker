@@ -4,7 +4,7 @@ Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.8
+Stable tag: 1.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ Adds a delivery date and time slot picker to WooCommerce checkout (Classic and B
 * Add **multiple blackout dates** via calendar
 * Limit max orders per time slot
 * **Disable weekdays** (e.g. no Sunday delivery), set a **minimum lead time** and a **maximum booking window**
+* **Delivery details in order emails** (customer and admin, HTML and plain text), with a setting to turn it off
 * Works with all WooCommerce shipping methods
 * **HPOS compatible** - works with WooCommerce High Performance Order Storage
 * Delivery details displayed on the Classic checkout thank-you page and order confirmation
@@ -63,6 +64,10 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 5. Delivery Date column on the WooCommerce Orders list
 
 == Changelog ==
+
+= 1.9 =
+* Added: delivery date and time slot now appear in WooCommerce order emails (customer and admin, HTML and plain text) for both Classic and Block checkout orders
+* Added: "Show in Emails" setting (enabled by default) under Delivery Settings
 
 = 1.8 =
 * Added: "Disabled Weekdays" setting to block delivery on chosen days of the week (e.g. Sundays)
@@ -122,17 +127,20 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 
 == Upgrade Notice ==
 
+= 1.9 =
+Delivery date and time slot now appear in WooCommerce order emails (Classic and Block checkout). Enabled by default and can be turned off in Delivery Settings.
+
 = 1.8 =
-Adds Disabled Weekdays, Minimum Lead Time and Maximum Booking Window settings. All are off by default, so existing stores are unaffected. No breaking changes.
+Adds Disabled Weekdays, Minimum Lead Time and Maximum Booking Window settings. All are off by default, so existing stores are unaffected.
 
 = 1.7 =
-Adds a Delivery Date column to the Orders list and unifies the delivery details design across Classic and Block order confirmation pages. No breaking changes.
+Adds a Delivery Date column to the Orders list and unifies the delivery details design across Classic and Block order confirmation pages.
 
 = 1.6 =
 Security hardening: server-side time slot validation and sanitized settings. Recommended for all users.
 
 = 1.5 =
-Adds a quick "Settings" link on the Plugins screen and a friendlier Blackout Dates picker (removable date tags instead of a raw comma list). No breaking changes.
+Adds a quick "Settings" link on the Plugins screen and a friendlier Blackout Dates picker (removable date tags instead of a raw comma list).
 
 = 1.4 =
 Fixes the "Max Orders per Time Slot" setting so it is now enforced, adds server-side date validation on Classic checkout, and hardens the plugin against a fatal-error edge case and PHP 8 warnings. Recommended update for all users, especially anyone relying on slot limits.

@@ -3,7 +3,7 @@
  * Plugin Name: Delivery Date & Time Slot Picker for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/delivery-date-time-slot-picker-for-woocommerce
  * Description: Allows customers to select delivery date and time slot at WooCommerce checkout. Supports blackout dates and slot limits.
- * Version: 1.8
+ * Version: 1.9
  * Author: NitsPatel
  * Author URI: https://github.com/NiteshPatel-1988
  * Requires Plugins: woocommerce
@@ -11,88 +11,92 @@
  * Domain Path: /languages
  * Requires PHP: 7.4
  * Requires at least: 6.0
+ * WC requires at least: 9.0
+ * WC tested up to: 11.2
  * Tested up to: 7.1
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * @package delivery-date-time-slot-picker-for-woocommerce
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 /**
  * Check if WooCommerce is active
  */
 if ( ! function_exists( 'is_plugin_active' ) ) {
-    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 }
 
 if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 
-    add_action( 'admin_notices', 'delidaam_plugin_woocommerce_required_notice' );
+	add_action( 'admin_notices', 'delidaam_plugin_woocommerce_required_notice' );
 
-    function delidaam_plugin_woocommerce_required_notice() {
-        ?>
-        <div class="notice notice-error">
-            <p><?php esc_html_e( 'Delivery Date & Time Slot Picker Plugin requires WooCommerce to be installed and active.', 'delivery-date-time-slot-picker-for-woocommerce' ); ?></p>
-        </div>
-        <?php
-    }
+	function delidaam_plugin_woocommerce_required_notice() {
+		?>
+		<div class="notice notice-error">
+			<p><?php esc_html_e( 'Delivery Date & Time Slot Picker Plugin requires WooCommerce to be installed and active.', 'delivery-date-time-slot-picker-for-woocommerce' ); ?></p>
+		</div>
+		<?php
+	}
 
-    // Stop plugin execution.
-    return;
+	// Stop plugin execution.
+	return;
 }
 
-define( 'DELIDAAM_DELIVERY_VERSION', '1.8' );
+define( 'DELIDAAM_DELIVERY_VERSION', '1.9' );
 define( 'DELIDAAM_DELIVERY_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'DELIDAAM_DELIVERY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 require_once DELIDAAM_DELIVERY_PLUGIN_PATH . 'includes/class-delidaam-blocks-compat.php';
-add_action( 'plugins_loaded', [ 'DELIDAAM_Blocks_Compat', 'init' ] );
+add_action( 'plugins_loaded', array( 'DELIDAAM_Blocks_Compat', 'init' ) );
 
 /**
  * Declare compatibility with HPOS and the Cart & Checkout blocks.
  */
 add_action(
-    'before_woocommerce_init',
-    function () {
-        if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
-            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
-            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
-        }
-    }
+	'before_woocommerce_init',
+	function () {
+		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
+		}
+	}
 );
 
 function delidaam_initialize_plugin() {
-    
-    require_once DELIDAAM_DELIVERY_PLUGIN_PATH . 'includes/class-delivery-date-time-picker.php';
-    require_once DELIDAAM_DELIVERY_PLUGIN_PATH . 'includes/class-delivery-settings.php';
 
-    if (class_exists('DELIDAAM_Delivery_Date_Time_Picker')) {
-        DELIDAAM_Delivery_Date_Time_Picker::get_instance();
-        
-    }
+	require_once DELIDAAM_DELIVERY_PLUGIN_PATH . 'includes/class-delivery-date-time-picker.php';
+	require_once DELIDAAM_DELIVERY_PLUGIN_PATH . 'includes/class-delivery-settings.php';
+
+	if ( class_exists( 'DELIDAAM_Delivery_Date_Time_Picker' ) ) {
+		DELIDAAM_Delivery_Date_Time_Picker::get_instance();
+
+	}
 }
-add_action('woocommerce_init', 'delidaam_initialize_plugin');
+add_action( 'woocommerce_init', 'delidaam_initialize_plugin' );
 
 /**
  * Add a "Settings" link on the Plugins list page, linking straight to
  * WooCommerce > Settings > Shipping > Delivery Settings.
  */
 function delidaam_plugin_action_links( $links ) {
-    $settings_url = add_query_arg(
-        [
-            'page'    => 'wc-settings',
-            'tab'     => 'shipping',
-            'section' => 'delidaam_delivery_settings',
-        ],
-        admin_url( 'admin.php' )
-    );
+	$settings_url = add_query_arg(
+		array(
+			'page'    => 'wc-settings',
+			'tab'     => 'shipping',
+			'section' => 'delidaam_delivery_settings',
+		),
+		admin_url( 'admin.php' )
+	);
 
-    $settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'delivery-date-time-slot-picker-for-woocommerce' ) . '</a>';
+	$settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'delivery-date-time-slot-picker-for-woocommerce' ) . '</a>';
 
-    array_unshift( $links, $settings_link );
+	array_unshift( $links, $settings_link );
 
-    return $links;
+	return $links;
 }
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'delidaam_plugin_action_links' );
 

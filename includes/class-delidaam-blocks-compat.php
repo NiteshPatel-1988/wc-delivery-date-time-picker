@@ -44,14 +44,14 @@ final class DELIDAAM_Blocks_Compat {
 		try {
 			woocommerce_register_additional_checkout_field(
 				array(
-					'id'          => 'delidaam/delivery_date',
-					'label'       => __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ),
-					'location'    => 'order',
-					'type'        => 'text',
-					'required'    => true,
+					'id'                => 'delidaam/delivery_date',
+					'label'             => __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ),
+					'location'          => 'order',
+					'type'              => 'text',
+					'required'          => true,
 					'sanitize_callback' => array( __CLASS__, 'sanitize_delivery_date' ),
 					'validate_callback' => array( __CLASS__, 'validate_delivery_date_callback' ),
-					'attributes'  => array(
+					'attributes'        => array(
 						'autocomplete'  => 'off',
 						'data-delidaam' => 'delivery_date',
 						'placeholder'   => __( 'Select a delivery date', 'delivery-date-time-slot-picker-for-woocommerce' ),
@@ -61,15 +61,15 @@ final class DELIDAAM_Blocks_Compat {
 
 			woocommerce_register_additional_checkout_field(
 				array(
-					'id'          => 'delidaam/delivery_time_slot',
-					'label'       => __( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ),
-					'location'    => 'order',
-					'type'        => 'select',
-					'required'    => true,
+					'id'                => 'delidaam/delivery_time_slot',
+					'label'             => __( 'Delivery Time Slot', 'delivery-date-time-slot-picker-for-woocommerce' ),
+					'location'          => 'order',
+					'type'              => 'select',
+					'required'          => true,
 					'sanitize_callback' => array( __CLASS__, 'sanitize_text_value' ),
 					'validate_callback' => array( __CLASS__, 'validate_time_slot_callback' ),
-					'placeholder' => __( 'Select a time slot', 'delivery-date-time-slot-picker-for-woocommerce' ),
-					'options'     => $options,
+					'placeholder'       => __( 'Select a time slot', 'delivery-date-time-slot-picker-for-woocommerce' ),
+					'options'           => $options,
 				)
 			);
 		} catch ( \Throwable $exception ) {
@@ -407,11 +407,11 @@ final class DELIDAAM_Blocks_Compat {
 			'delidaam-delivery-datepicker',
 			'delidaamCheckout',
 			array(
-				'blackoutDates'   => self::get_blackout_dates(),
+				'blackoutDates'    => self::get_blackout_dates(),
 				'disabledWeekdays' => self::get_disabled_weekdays(),
-				'minDays'         => self::get_min_days(),
-				'maxDays'         => self::get_max_days(),
-				'dateFieldLabel' => __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ),
+				'minDays'          => self::get_min_days(),
+				'maxDays'          => self::get_max_days(),
+				'dateFieldLabel'   => __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ),
 			)
 		);
 	}

@@ -17,6 +17,36 @@ final class DELIDAAM_Blocks_Compat {
 		add_filter( 'woocommerce_sanitize_additional_field', array( __CLASS__, 'sanitize' ), 10, 2 );
 		add_action( 'woocommerce_set_additional_field_value', array( __CLASS__, 'mirror_to_legacy_meta' ), 10, 4 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'ensure_assets' ) );
+		add_filter( 'rest_pre_dispatch', array( __CLASS__, 'drop_empty_time_slot' ), 10, 3 );
+	}
+
+	/**
+	 * Drop an empty time slot from Store API requests before WordPress validates them.
+	 *
+	 * WooCommerce restricts a required select to its registered options, so an
+	 * unselected slot ("") is rejected with a raw "is not one of ..." message.
+	 * Removing the empty value lets WooCommerce report "Delivery Time Slot is
+	 * required" instead, and partial updates simply skip the field.
+	 *
+	 * @param mixed            $result  Response to replace the requested one, or null.
+	 * @param \WP_REST_Server  $server  Server instance.
+	 * @param \WP_REST_Request $request Request being dispatched.
+	 * @return mixed
+	 */
+	public static function drop_empty_time_slot( $result, $server, $request ) {
+		if ( ! $request instanceof \WP_REST_Request || 0 !== strpos( $request->get_route(), '/wc/store/' ) ) {
+			return $result;
+		}
+
+		$fields = $request->get_param( 'additional_fields' );
+		$key    = 'delidaam/delivery_time_slot';
+
+		if ( is_array( $fields ) && isset( $fields[ $key ] ) && is_string( $fields[ $key ] ) && '' === trim( $fields[ $key ] ) ) {
+			unset( $fields[ $key ] );
+			$request->set_param( 'additional_fields', $fields );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -52,9 +82,7 @@ final class DELIDAAM_Blocks_Compat {
 					'sanitize_callback' => array( __CLASS__, 'sanitize_delivery_date' ),
 					'validate_callback' => array( __CLASS__, 'validate_delivery_date_callback' ),
 					'attributes'        => array(
-						'autocomplete'  => 'off',
-						'data-delidaam' => 'delivery_date',
-						'placeholder'   => __( 'Select a delivery date', 'delivery-date-time-slot-picker-for-woocommerce' ),
+						'autocomplete' => 'off',
 					),
 				)
 			);
@@ -412,6 +440,7 @@ final class DELIDAAM_Blocks_Compat {
 				'minDays'          => self::get_min_days(),
 				'maxDays'          => self::get_max_days(),
 				'dateFieldLabel'   => __( 'Delivery Date', 'delivery-date-time-slot-picker-for-woocommerce' ),
+				'datePlaceholder'  => __( 'Select a delivery date', 'delivery-date-time-slot-picker-for-woocommerce' ),
 			)
 		);
 	}

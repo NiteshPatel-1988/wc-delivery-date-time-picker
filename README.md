@@ -66,6 +66,9 @@ This plugin is translation-ready. `.pot` file is located in `/languages/`.
 
 ## 📝 Changelog
 
+### 1.9.1
+- Fixed a PHP notice about invalid attributes when registering the Block checkout date field (newer WooCommerce versions)
+
 ### 1.9
 - Added delivery date and time slot to WooCommerce order emails (HTML and plain text, customer and admin), for Classic and Block checkout
 - Added a "Show in Emails" setting (enabled by default)

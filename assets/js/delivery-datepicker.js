@@ -169,6 +169,15 @@ jQuery( function( $ ) {
 		$input.data( 'delidaamReady', true );
 		$input.attr( 'autocomplete', 'off' );
 
+		if (
+			isBlockCheckoutField( input ) &&
+			! $input.attr( 'placeholder' ) &&
+			window.delidaamCheckout &&
+			window.delidaamCheckout.datePlaceholder
+		) {
+			$input.attr( 'placeholder', window.delidaamCheckout.datePlaceholder );
+		}
+
 		$input.datepicker(
 			{
 				dateFormat: 'yy-mm-dd',

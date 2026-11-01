@@ -4,7 +4,7 @@ Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.9
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 5. Delivery Date column on the WooCommerce Orders list
 
 == Changelog ==
+
+= 1.9.1 =
+* Fixed: PHP notice  was called incorrectly on Block Checkout (invalid attributes) logged on every page load with newer WooCommerce versions
 
 = 1.9 =
 * Added: delivery date and time slot now appear in WooCommerce order emails (customer and admin, HTML and plain text) for both Classic and Block checkout orders
@@ -126,6 +129,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 * Admin settings for blackout dates and slot limit
 
 == Upgrade Notice ==
+
+= 1.9.1 =
+Fixes a PHP notice logged on every page load with newer WooCommerce, and a confusing Block checkout error when no time slot is selected.
 
 = 1.9 =
 Delivery date and time slot now appear in WooCommerce order emails (Classic and Block checkout). Enabled by default and can be turned off in Delivery Settings.

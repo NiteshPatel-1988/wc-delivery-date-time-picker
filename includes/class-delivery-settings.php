@@ -97,6 +97,7 @@ add_filter(
 					'type' => 'sectionend',
 					'id'   => 'delidaam_delivery_settings',
 				),
+				array( 'type' => 'delidaam_pro_box', 'id' => 'delidaam_pro_box' ),
 			);
 		}
 
@@ -185,5 +186,41 @@ add_filter(
 		$lines = array_map( 'sanitize_text_field', preg_split( "/\r\n|\n|\r/", (string) $value ) );
 
 		return implode( "\n", array_unique( array_filter( $lines ) ) );
+	}
+);
+
+/**
+ * Non-intrusive "Go Pro" information box shown at the bottom of the settings page only.
+ * No nag, no tracking, no external requests: it only renders static text and links.
+ */
+add_action(
+	'woocommerce_admin_field_delidaam_pro_box',
+	function () {
+		$features = array(
+			__( 'Same-day and next-day delivery, preparation time and daily cut-off time', 'delivery-date-time-slot-picker-for-woocommerce' ),
+			__( 'Different time slots for each weekday', 'delivery-date-time-slot-picker-for-woocommerce' ),
+			__( 'Maximum orders per day, plus "Fully booked" and "N left" indicators at checkout', 'delivery-date-time-slot-picker-for-woocommerce' ),
+			__( 'Delivery fees for specific time slots (for example an Express slot)', 'delivery-date-time-slot-picker-for-woocommerce' ),
+			__( 'Delivery Groups: separate rules and slots for products and categories', 'delivery-date-time-slot-picker-for-woocommerce' ),
+			__( 'Delivery Calendar with capacity meter and upcoming deliveries by day', 'delivery-date-time-slot-picker-for-woocommerce' ),
+			__( 'Sortable Delivery Date column and rescheduling from the order screen', 'delivery-date-time-slot-picker-for-woocommerce' ),
+		);
+		?>
+		<div class="delidaam-pro-box" style="max-width:760px;margin:24px 0;padding:16px 20px;background:#fff;border:1px solid #c3c4c7;border-left:4px solid #2271b1;">
+			<h2 style="margin-top:0;"><?php esc_html_e( 'Need more control? Try Delivery Date & Time Slot Picker Pro', 'delivery-date-time-slot-picker-for-woocommerce' ); ?></h2>
+			<ul style="list-style:disc;margin-left:20px;">
+				<?php foreach ( $features as $feature ) : ?>
+					<li><?php echo esc_html( $feature ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+			<p>
+				<?php esc_html_e( 'All your current settings are kept when you upgrade. A 30-day free trial is available, no payment required to start.', 'delivery-date-time-slot-picker-for-woocommerce' ); ?>
+			</p>
+			<p>
+				<a class="button button-primary" href="<?php echo esc_url( 'https://devorbittechnologies.com/delivery-date-time-slot-picker-pro/' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn more about Pro', 'delivery-date-time-slot-picker-for-woocommerce' ); ?></a>
+				<a class="button" href="<?php echo esc_url( 'https://www.youtube.com/watch?v=1QMYyY6Pqq8' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Watch demo', 'delivery-date-time-slot-picker-for-woocommerce' ); ?></a>
+			</p>
+		</div>
+		<?php
 	}
 );

@@ -54,6 +54,21 @@ Found under **WooCommerce > Settings > Shipping > Delivery Settings**.
 
 All rules are applied in the date picker and re-checked server-side on both Classic and Block checkout, so they cannot be bypassed by editing the date field. Dates are evaluated in the store timezone.
 
+## 🚀 Upgrade to Pro
+
+Need more control? [Delivery Date & Time Slot Picker Pro](https://devorbittechnologies.com/delivery-date-time-slot-picker-pro/) adds:
+
+- Same-day and next-day delivery, preparation time and daily cut-off time
+- Different time slots for each weekday
+- Maximum orders per day, plus "Fully booked" and "N left" indicators
+- Delivery fees by time slot
+- Delivery Groups for products and categories
+- Delivery Calendar and rescheduling from the order screen
+
+Your existing settings are kept when you upgrade. A 30-day free trial is available.
+
+[Learn more](https://devorbittechnologies.com/delivery-date-time-slot-picker-pro/) | [Watch the demo](https://www.youtube.com/watch?v=1QMYyY6Pqq8) | [Documentation](https://devorbittechnologies.com/delivery-date-time-slot-picker-pro-docs/)
+
 ## 📥 Installation
 
 1. Upload the plugin to your WordPress `/wp-content/plugins/` directory.
@@ -65,6 +80,9 @@ All rules are applied in the date picker and re-checked server-side on both Clas
 This plugin is translation-ready. `.pot` file is located in `/languages/`.
 
 ## 📝 Changelog
+
+### 1.9.2
+- Fixed: deleting the free plugin no longer wipes the settings shared with the Pro plugin (time slots, blackout dates, slot limit, minimum and maximum days) when Pro is installed
 
 ### 1.9.1
 - Fixed a PHP notice about invalid attributes when registering the Block checkout date field (newer WooCommerce versions)

@@ -4,7 +4,7 @@ Tags: woocommerce, delivery date, time slot, checkout, shipping
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,25 @@ Adds a delivery date and time slot picker to WooCommerce checkout (Classic and B
 * **HPOS compatible** - works with WooCommerce High Performance Order Storage
 * Delivery details displayed on the Classic checkout thank-you page and order confirmation
 * Settings available at **WooCommerce > Settings > Shipping > Delivery Settings**
+
+== Upgrade to Pro ==
+Need more control? **[Delivery Date & Time Slot Picker Pro](https://devorbittechnologies.com/delivery-date-time-slot-picker-pro/)** adds:
+
+* Same-day and next-day delivery, preparation time and a daily cut-off time
+* Different **time slots for each weekday**
+* **Maximum orders per day**, plus "Fully booked" and "N left" indicators at checkout
+* **Delivery fees by time slot** (for example an Express slot), added as a real order fee
+* **Delivery Groups** with their own rules and slots for products and categories
+* **Delivery Calendar** with a capacity meter and upcoming deliveries grouped by day
+* Sortable Delivery Date column and **rescheduling from the order screen**
+
+All paid plans include everything in the free plugin. Your existing settings are kept when you upgrade, and a 30-day free trial is available with no payment required to start.
+
+**Watch the Pro demo:**
+
+[youtube https://www.youtube.com/watch?v=1QMYyY6Pqq8]
+
+[Learn more about Pro](https://devorbittechnologies.com/delivery-date-time-slot-picker-pro/) | [Watch the demo](https://www.youtube.com/watch?v=1QMYyY6Pqq8) | [Documentation](https://devorbittechnologies.com/delivery-date-time-slot-picker-pro-docs/)
 
 == Installation ==
 1. Upload the plugin folder to `/wp-content/plugins/`
@@ -56,6 +75,12 @@ Yes, it is fully compatible with shipping zones and shipping methods.
 = Is this plugin compatible with WooCommerce HPOS? =
 Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throughout, which are fully compatible with WooCommerce High Performance Order Storage (custom order tables).
 
+= What does the Pro version add? =
+Pro adds same-day and next-day rules with cut-off time, time slots per weekday, maximum orders per day, delivery fees by time slot, product and category Delivery Groups, a Delivery Calendar and rescheduling from the order screen. See the [Pro page](https://devorbittechnologies.com/delivery-date-time-slot-picker-pro/) for details and pricing.
+
+= Will I lose my settings if I upgrade to Pro? =
+No. Pro pauses and deactivates the free plugin automatically, and shared settings such as time slots and blackout dates are kept.
+
 == Screenshots ==
 1. Delivery date and time slot fields on Classic & Block-based checkout
 2. Delivery Settings: blackout dates, disabled weekdays, lead time, booking window, slot limit and time slots
@@ -64,6 +89,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 5. Delivery Date column on the WooCommerce Orders list
 
 == Changelog ==
+
+= 1.9.2 =
+* Fixed: deleting the free plugin no longer wipes the settings shared with the Pro plugin (time slots, blackout dates, slot limit, minimum and maximum days) when Pro is installed
 
 = 1.9.1 =
 * Fixed: PHP notice  was called incorrectly on Block Checkout (invalid attributes) logged on every page load with newer WooCommerce versions
@@ -129,6 +157,9 @@ Yes. The plugin uses `$order->get_meta()` and `$order->update_meta_data()` throu
 * Admin settings for blackout dates and slot limit
 
 == Upgrade Notice ==
+
+= 1.9.2 =
+Keeps your delivery settings intact when the free plugin is deleted after switching to Pro.
 
 = 1.9.1 =
 Fixes a PHP notice logged on every page load with newer WooCommerce, and a confusing Block checkout error when no time slot is selected.
